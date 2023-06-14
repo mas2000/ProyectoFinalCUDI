@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{% endblock %} - NewPlant</title>
+  {% block head %}
+  {% endblock %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/alerts.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dark.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+    integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="icon" href="{{ url_for('static', filename='img/icon.png') }}">
+</head>
+
+<body>
+  <header>
+    <nav class="navbar">
+      <a href="{{ url_for('index') }}"><img class="navbar__logo" src="{{ url_for('static', filename='img/logo.png') }}" alt="logo de NewPlant"></a>
+<!--      <ul class="navbar__list">
+        {% if current_user.is_anonymous %}
+          <li><a class="navbar__link" href="{{ url_for('create_user') }}">Crear cuenta</a></li>
+          <li><a class="navbar__link" href="{{ url_for('login') }}">Ingresar</a></li>
+          <li><a class="navbar__link" href="{{ url_for('contact') }}">Contacto</a></li>
+        {% else %}
+          {% if current_user.admin %}
+            <li><a class="navbar__link" href="{{ url_for('create') }}">Crear</a></li>
+            <li><a class="navbar__link" href="{{ url_for('users') }}">Usuarios</a></li>
+          {% endif %}
+          <li><a class="navbar__link" href="{{ url_for('contents') }}">Posts</a></li>
+          <li><a class="navbar__link" href="{{ url_for('profile', user_id=current_user.id) }}">Perfil</a></li>
+          <li><a class="navbar__link" href="{{ url_for('logout') }}">Salir</a></li>
+          {% if current_user.admin %}
+            <li><a class="navbar__link" href="{{ url_for('contact_us') }}">Contacto</a></li>
+          {% else %}
+            <li><a class="navbar__link" href="{{ url_for('contact') }}">Contacto</a></li>
+          {% endif %}
+        {% endif %}
+        <li><a class="navbar__link" href="{{ url_for('contact') }}">Contacto</a></li>-->
+      <div class="navbar__menu" id="navbar__menu">
+        <ul class="navbar__list">
+          <li><a class="navbar__link" href="{{ url_for('contents') }}">Posts</a></li>
+          {% if not current_user.is_anonymous %}
+          <li><a class="navbar__link" href="{{ url_for('profile', user_id=current_user.id) }}">Perfil</a></li>
+          {% endif %}
+          {% if current_user.admin %}
+          <li><a class="navbar__link" href="{{ url_for('create') }}">Crear</a></li>
+          <li><a class="navbar__link" href="{{ url_for('contact_us') }}">Contacto</a></li>
+          {% else %}
+          <li><a class="navbar__link" href="{{ url_for('contact') }}">Contacto</a></li>
+          {% endif %}
+          <li onclick="toggleMenu()" id="menu"><a class="navbar__link" href="#">Menu</a></li>
+        </ul>
+      </div>
+      
+      <div class="navbar__toggle" id="navbar__toggle">
+        <div class="hamburger"></div>
+      </div>
+    </nav>
+    {% block header %}
+    {% endblock %}
+  </header>
+  <div class="submenu__wrap" id="subMenu">
+    <div class="submenu">
+      {% if current_user.is_anonymous %}
+      <a href="{{ url_for('create_user') }}" class="submenu__link">
+        <p>Crear Cuenta</p>
+        <span>></span>
+      </a>
+      <a href="{{ url_for('login') }}" class="submenu__link">
+        <p>Ingresar</p>
+        <span>></span>
+      </a>
+      {% else %}
+      <p>{{ current_user.username }}</p>
+      <hr>
+      {% if current_user.admin %}
+      <a href="{{ url_for('users') }}" class="submenu__link">
+        <p>Usuarios</p>
+        <span>></span>
+      </a>
+      {% endif %}
+      <a href="{{ url_for('logout') }}" class="submenu__link">
+        <p>Cerrar Sesion</p>
+        <span>></span>
+      </a>
+      {% endif %}
+    </div>
+  </div>
+  <main>
+    {% for message in get_flashed_messages() %}
+    <div id="alerts" class="alert alert--info open">
+      <p class="alert__message">{{ message }}</p>
+    </div>
+    {% endfor %}
+
+    {% block main %}
+    {% endblock %}
+  </main>
+  <footer class="footer">
+    <p>NewPlant. </p>
+    <address>
+      <p>Buenos Aires, Argentina. </p>
+    </address>
+    <p>Copyright &copy; 2022 NewPlant, todos los derechos reservados.</p>
+  </footer>
+  <div class="toggle">
+    <input type="checkbox" class="toggle__checkbox" id="checkbox">
+    <label for="checkbox" class="toggle__label">
+      <i class="fas fa-moon"></i>
+      <i class="fas fa-sun"></i>
+      <div class="toggle__ball">
+    </label>
+  </div>
+  <script src="{{ url_for('static', filename='js/layout.js') }}"></script>
+</body>
+
+</html>
